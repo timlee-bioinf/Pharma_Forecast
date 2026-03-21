@@ -1,2 +1,3 @@
-# stat443project
-Stat 443: Time Series Analysis - Group Project
+# Pharmaceutical Drug Sales Forecasting
+
+## Stat 443: Time Series Analysis - Group Project

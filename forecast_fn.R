@@ -1,5 +1,57 @@
 # The formats of forecast functions are the following.
 
+#  =======  Teevint's Simple Forecasts rule ======== 
+# Persistence Forecast rule
+persist_fc_rule = function(s_train, s_holdout) {
+  # 1. RMSE Math
+  persist_mse = 0
+  persist_fc = s_train[length(s_train)] 
+  persist_yt = s_holdout[1] 
+  persist_fc_err = persist_yt - persist_fc 
+  persist_mse = persist_mse + persist_fc_err^2 
+  persist_fcvec = numeric(length(s_holdout))
+  
+  for (i in 2:length(s_holdout)) {
+    persist_yt = s_holdout[i] 
+    persist_fc = s_holdout[i - 1] 
+    persist_fcvec[i] = persist_fc
+    persist_fc_err = persist_yt - persist_fc
+    persist_mse = persist_mse + persist_fc_err^2
+  }
+  persist_rmse = sqrt(persist_mse / length(s_holdout))
+  
+  # 2. MAPE Math
+  valid_idx = which(s_holdout > 0)
+  persist_forecasts = c(s_train[length(s_train)], s_holdout[-length(s_holdout)])
+  persist_mape = mean(abs((s_holdout[valid_idx] - persist_forecasts[valid_idx]) / s_holdout[valid_idx])) * 100
+  
+  # 3. Return both as a list
+  return(list(rmse = persist_rmse, mape = persist_mape))
+}
+
+
+# Average Forecast rule
+avg_fc_rule = function(s_train, s_holdout) {
+  avg = mean(s_train) 
+  avg_mse = 0
+  
+  for (i in 1:length(s_holdout)) {
+    avg_yt = s_holdout[i]
+    avg_fc = avg
+    avg_fc_err = avg_yt - avg_fc
+    avg_mse = avg_mse + avg_fc_err^2
+  }
+  avg_rmse = sqrt(avg_mse / length(s_holdout))
+  
+  # MAPE Math
+  valid_idx = which(s_holdout > 0)
+  avg_mape = mean(abs((s_holdout[valid_idx] - avg) / s_holdout[valid_idx])) * 100
+
+  return(list(rmse = avg_rmse, mape = avg_mape))
+}
+
+
+# ======= Sohbat's Smoothing and Seasonal Functions =========
 # simple exponential smoothing
 # esm_fc = function(train,holdout,alpha,level,iprint)
 esm_fc = function(train, holdout, alpha, level, iprint=F) {

@@ -70,4 +70,4 @@ for (col_name in targets) {
 
 print(results_table)
 
-write.csv(results_table, file = "simple_FC_results_table.csv", row.names = FALSE)
+write.csv(results_table, file = "output/simple_FC_results_table.csv", row.names = FALSE)

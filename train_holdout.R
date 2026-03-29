@@ -2,13 +2,13 @@
 source("data.R", chdir = TRUE)
 
 # holdout set: last 20% of the data
-data_size <- nrow(salesmonthly)
-train_size <- floor(0.8 * data_size)
-train <- salesmonthly[1:train_size, ]
-holdout <- salesmonthly[(train_size + 1):data_size, ]
+N <- nrow(salesmonthly)
+ntrain <- floor(0.8 * N)
+train <- salesmonthly[1:ntrain, ]
+holdout <- salesmonthly[(ntrain + 1):N, ]
 
 # get end date of train set
-train_end_date <- as.Date(train$datum[train_size])
+train_end_date <- as.Date(train$datum[ntrain])
 print(paste("Train set end date:", train_end_date))
 
 # get time series for train and holdout sets using window function

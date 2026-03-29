@@ -1,4 +1,5 @@
-source('data.R', local = TRUE)
+# get data
+source("data.R", chdir = TRUE)
 
 # summary
 print(paste("Number of rows:", nrow(salesmonthly)))

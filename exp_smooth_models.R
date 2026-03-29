@@ -67,3 +67,12 @@ print(round(out[1:12,],2))
 rmse_vec = cbind(esmfc$rmse, holtfc$rmse, aseason$rmse, mseason$rmse)
 colnames(rmse_vec) = c("SES", "Holt", "Additive Seasonal", "Multiplicative Seasonal")
 print(round(rmse_vec, 2))
+
+# plot forecasts vs holdout
+plot(out[,1], out[,2], type='l', col='black', xlab='Year', ylab='Sales', main='Forecasts vs Holdout')
+lines(out[,1], out[,3], col='blue', lty=2)
+lines(out[,1], out[,4], col='red', lty=2)
+lines(out[,1], out[,5], col='green', lty=2)
+lines(out[,1], out[,6], col='purple', lty=2)
+legend("topleft", legend=c("Holdout", "SES", "Holt", "Additive Seasonal", "Multiplicative Seasonal"), 
+       col=c("black", "blue", "red", "green", "purple"), lty=c(1,2,2,2,2), cex=0.8)

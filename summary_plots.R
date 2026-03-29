@@ -41,6 +41,7 @@ summary_table <- data.frame(
     R06_Mean = tapply(salesmonthly$R06, format(as.Date(salesmonthly$datum), "%m"), mean),
     R06_SD = tapply(salesmonthly$R06, format(as.Date(salesmonthly$datum), "%m"), sd)
 )
+write.csv(summary_table, "output/summary_table.csv", row.names = FALSE)
 
 # get time plots for each column
 plot(ts_sales_m01ab, main = "M01AB Sales", xlab = "Year", ylab = "Sales")

@@ -1,12 +1,12 @@
-s = read.csv("data/salesdaily.csv",header=T)
+s = read.csv("data/salesmonthly.csv",header=T)
 t = nrow(s)
-ntrain = round(t * 0.80)
+ntrain = floor(t * 0.80)
 
 targets = c("M01AB", "M01AE", "N02BA", "N02BE", "N05B", "N05C", "R03", "R06")
 
 results_table = data.frame(
   Drug_Code = character(),
-  Avg_Daily_Sales = numeric(),
+  Avg_Monthly_Sales = numeric(),
   Persistence_RMSE = numeric(),
   Average_RMSE = numeric(),
   Persistence_MAPE_pct = numeric(),
@@ -59,7 +59,7 @@ for (col_name in targets) {
   # Add all the metrics as a new row
   new_row = data.frame(
     Drug_Code = col_name,
-    Avg_Daily_Sales = round(avg_volume, 1),
+    Avg_Monthly_Sales = round(avg_volume, 1),
     Persistence_RMSE = round(persist_rmse, 3),
     Average_RMSE = round(avg_rmse, 3),
     Persistence_MAPE_pct = round(persist_mape, 1),

@@ -4,11 +4,14 @@ ntrain = round(t * 0.80)
 
 targets = c("M01AB", "M01AE", "N02BA", "N02BE", "N05B", "N05C", "R03", "R06")
 
+results_table = data.frame(
+  Drug_Code = character(),
+  Persistence_RMSE = numeric(),
+  Average_RMSE = numeric()
+)
+
 for (col_name in targets) {
   
-  print(paste("--- ", col_name, " Summary ---"))
-  print(summary(s[[col_name]]))
-
   s_train = s[[col_name]][1:ntrain]
   s_holdout = s[[col_name]][(ntrain+1):t]
   
@@ -28,7 +31,6 @@ for (col_name in targets) {
   persist_mse = persist_mse + persist_fc_err^2
   }
   persist_rmse = sqrt(persist_mse / length(s_holdout))
-  print(paste(col_name, "- Persistence RMSE:", round(persist_rmse, 3)))
   
   #==average==
   avg = mean(s_train) 
@@ -40,7 +42,16 @@ for (col_name in targets) {
     avg_mse = avg_mse + avg_fc_err^2
   }
   avg_rmse = sqrt(avg_mse / length(s_holdout))
-  print(paste(col_name, "- Average RMSE:", round(avg_rmse, 3)))
   
-  cat("\n")
-}
+  # Add to Table
+  new_row = data.frame(
+    Drug_Code = col_name,
+    Persistence_RMSE = round(persist_rmse, 3),
+    Average_RMSE = round(avg_rmse, 3)
+  )
+  results_table = rbind(results_table, new_row)
+  
+  # cat("\n")
+} 
+
+print(results_table)

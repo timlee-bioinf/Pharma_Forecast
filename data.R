@@ -4,23 +4,18 @@ library(readr)
 salesmonthly <- read_csv("data/salesmonthly.csv")
 spec(salesmonthly)
 
-#print("--- Problem January 2017 Row ---")
-#print(salesmonthly[salesmonthly$datum == "2017-01-31", ])
-
+# ----------------------------------------------------------------------------------------------------
+# IMPUTE MISSING DATA FOR JANUARY 2017 SALES
+# ----------------------------------------------------------------------------------------------------
+# import daily sales data
 salesdaily <- read.csv("data/salesdaily.csv", header = TRUE)
 targets <- c("M01AB", "M01AE", "N02BA", "N02BE", "N05B", "N05C", "R03", "R06")
 
+# impute missing monthly data for January 2017 from daily sales
 jan_daily <- salesdaily[salesdaily$Year == 2017 & salesdaily$Month == 1, ]
 jan_sums <- colSums(jan_daily[, targets], na.rm = TRUE)
 
-#print(jan_sums)
-
 salesmonthly[salesmonthly$datum == "2017-01-31", targets] <- as.list(round(jan_sums, 3))
-#print("--- Corrected January 2017 Row ---")
-#print(salesmonthly[salesmonthly$datum == "2017-01-31", ])
-
-write_csv(salesmonthly, 'data/fixed_salesmonthly.csv')
-
 
 # get time series
 ts_sales_m01ab = ts(salesmonthly$M01AB, start = c(2014, 1), frequency = 12)
